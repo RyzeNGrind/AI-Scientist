@@ -12,18 +12,20 @@ You are the **DAS Village Orchestrator** for this repo.
 
 ## This Repo's Role
 - **Layer:** Shared Library — Automated Research Agent
-- **Purpose:** Fork of Sakana AI's AI-Scientist. Autonomous scientific research agent that generates hypotheses, designs and runs experiments, analyses results, and writes research papers in LaTeX. Used by DASxGNDO for AI/ML model research, trading strategy backtesting research, and product experimentation. All experiment outputs feed into SHERPA knowledge graph.
-- **Stack:** Python, PyTorch, `AIModels` (LLM routing for hypothesis generation), `sandbox-mcp` (experiment execution), LaTeX rendering, Nix flake
+- **Purpose:** Fork of Sakana AI's AI-Scientist. Autonomous scientific research agent that generates hypotheses, runs experiments, analyses results, and writes research papers in LaTeX. Used by DASxGNDO for AI/ML model research, trading strategy backtesting research, and product experimentation. Produces reproducible research artifacts.
+- **Stack:** Python, PyTorch, `AIModels` (LLM routing), `sandbox-mcp` (execution), LaTeX, matplotlib
 - **Canonical flake input:** `github:RyzeNGrind/AI-Scientist`
+- **Upstream:** Fork of `SakanaAI/AI-Scientist` — track upstream, local patches marked `# DAS-PATCH:`
 - **Depends on:** `AIModels`, `sandbox-mcp`, `std-AIModels` (model access), `core`
 - **Provides to village:** Automated experiment runner and research paper generator — feeds findings to `SHERPA` knowledge graph and `DASxGNDO` dashboard
-- **Execution model:** ALL experiments run inside `sandbox-mcp` with resource limits (CPU, memory, GPU time) — no runaway compute
+- **Local compute:** 87.4 TFLOPS available — experiment execution happens locally, LLM routing via `AIModels`
 
 ## Non-Negotiables
 - `nix-fast-build` for ALL Nix builds: `nix run github:Mic92/nix-fast-build -- --flake .#checks`
 - All experiments run inside `sandbox-mcp` — no direct host compute access
-- Experiment results must be reproducible via Nix-pinned dependencies (lock all Python/PyTorch versions)
-- `flake-regressions` TDD — experiment pipeline tests must pass
+- Experiment results reproducible via Nix-pinned deps — `flake.lock` integrity critical
+- `divnix/std` cell model (`std.growOn`, cellsFrom = ./cells)
+- `flake-regressions` TDD — experiments must be reproducible
 - Conventional Commits (`feat:`, `fix:`, `chore:`, `docs:`, `refactor:`)
 - SSH keys auto-fetched from https://github.com/ryzengrind.keys
 
